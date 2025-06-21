@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import kagglehub
 from classifier import NN_MSN
+from preprocess import preprocess
 
 class Learning():
     def __init__(self,
@@ -10,18 +11,19 @@ class Learning():
                  num_epochs,
 
                 ):
+                
         self.model = NN_MSN()
         self.data_path = data_path
         self.num_epochs = num_epochs
-        
+    
+
+
     def load_data(self):
         """
+
         """
-        df = pd.read_csv("data/time_series_data_human_activities.csv")
-        df = df.sample(n=50000)
-        print(len(df))
-        labels = df['activity'].value_counts()
-        print(labels)
+        preprocess = preprocess()
+
     def train():
         return 0
 
