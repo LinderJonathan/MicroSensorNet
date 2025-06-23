@@ -8,7 +8,7 @@ class NN_MSN(nn.Module):
 
     def __init__(self):
         super(NN_MSN, self).__init__()
-        self.fc1 = nn.Linear(1, 6)
+        self.fc1 = nn.Linear(3, 6)  
         self.fc2 = nn.Linear(6, 10)
         self.fc3 = nn.Linear(10, 3)
         self.relu = nn.ReLU()
