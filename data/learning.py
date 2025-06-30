@@ -89,8 +89,6 @@ class Learning():
         return predicted_correct
 
 def main(data_path, num_epochs, batch_size, model_path):
-    # TODO: add argparse to read config from command line
-
 
     learner = Learning(data_path=data_path, num_epochs=num_epochs, batch_size=batch_size, model_path=model_path)
     x_train_tensor, y_train_tensor, x_test_tensor, y_test_tensor = learner.load_data()
