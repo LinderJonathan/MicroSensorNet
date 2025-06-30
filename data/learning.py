@@ -8,21 +8,37 @@ from sklearn.preprocessing import LabelEncoder
 
 
 class Learning():
+    """
+    Class responsible for loading, training and saving 
+    a neural network trained for multiclass classification.
+    """
     def __init__(self,
                  data_path,
                  num_epochs,
-                 batch_size
+                 batch_size,
+                 model_path=None
                 ):
                 
         self.model = NN_MSN()
         self.data_path = data_path
         self.num_epochs = num_epochs
         self.batch_size = batch_size
+        self.model_path = model_path
+        
         self.loss_fn = torch.nn.CrossEntropyLoss()
         self.optimizer = torch.optim.Adam(self.model.parameters())
 
     def load_data(self):
         """
+        Loads dataset from local file path of gyroscope data (x,y,z) and 
+        activity label (standing, walking, jogging)
+
+        Args:
+            x (Tensor): Input tensor of shape (batch_size, input_size)
+
+        Returns:
+            Tensor: Output logits in shape (batch_size, num_classes)
+
         """
         human_data = pd.read_csv(self.data_path)
         gyro_data, activity = human_data[['x-axis', 'y-axis', 'z-axis']], human_data['activity']
@@ -35,44 +51,56 @@ class Learning():
 
         return (x_train_tensor, y_train_tensor, x_test_tensor, y_test_tensor)
     
-    def train(self, x_train_tensor, y_train_tensor, epoch):
+    def train(self, x_train_tensor, y_train_tensor):
         
         training_set = TensorDataset(x_train_tensor, y_train_tensor)
         loader = DataLoader(training_set, batch_size=self.batch_size)
 
-        for epoch in range(self.num_epochs):
+        for i in range(self.num_epochs):
+            
+            correct_predicted = 0
             total_loss = 0
             self.model.eval()
+
             for x_batch, y_batch in loader:
                 self.optimizer.zero_grad()
                 output = self.model(x_batch)
 
                 loss = self.loss_fn(output, y_batch)
                 total_loss += loss.item()
+                correct_predicted += self.predicted(output, y_batch)
                 loss.backward()
                 self.optimizer.step()
 
-                print(loss)
-
-        # TODO: save model to file
-
+            print(f"Epoch: {i}")
+            print(f"Accruacy: {correct_predicted/len(y_train_tensor)}")
+            print(f"Loss: {total_loss} \n")
+        
+        # save model to file
+        if self.model_path is not None:
+            torch.save(self.model.state_dict(), self.model_path)
         return 0
 
-    def inference(self, x_test_tensor, y_test_tensor):
-        # TODO: run inference to compute some metrics
-        return 0
+    def predicted(self, logits, y_test_tensor): # model_path
+        predictions = torch.argmax(logits, dim=1)
+        
+        predicted_correct = (predictions == y_test_tensor).sum().item()
 
-def main(data_path, num_epochs, batch_size):
+        return predicted_correct
+
+def main(data_path, num_epochs, batch_size, model_path):
     # TODO: add argparse to read config from command line
 
 
-    learner = Learning(data_path=data_path, num_epochs=num_epochs, batch_size=batch_size)
+    learner = Learning(data_path=data_path, num_epochs=num_epochs, batch_size=batch_size, model_path=model_path)
     x_train_tensor, y_train_tensor, x_test_tensor, y_test_tensor = learner.load_data()
-    learner.train(x_train_tensor=x_train_tensor, y_train_tensor=y_train_tensor, epoch=num_epochs)
+    learner.train(x_train_tensor=x_train_tensor, y_train_tensor=y_train_tensor)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('path', type=str, help='Path to dataset')
     parser.add_argument('epochs', type=int, help='Number of epochs')
     parser.add_argument('batch_size', type=int, help='Batch size')
+    parser.add_argument('model_path', type=str, default=None, help="Path to save/load model")
     args = parser.parse_args()
-    main(args.path, args.epochs, args.batch_size)
+    main(args.path, args.epochs, args.batch_size, args.model_path)
