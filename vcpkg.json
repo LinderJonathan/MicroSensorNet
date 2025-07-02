@@ -1,0 +1,6 @@
+{
+    "name": "microsensornet",
+    "dependencies": [
+        "nlohmann-json"
+    ]
+}

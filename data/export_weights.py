@@ -13,21 +13,22 @@ def quantize_weights(weights):
 
 def export_weights(model_path, weight_path):
 
+    # Loading state model state dictionary
     state_dict = torch.load(model_path)
-
     model = NN_MSN()
     model.load_state_dict(state_dict)
 
+    # Obtaining model state dictionary items
     all_weights = {}
-    for name, param in model.named_parameters():
 
+    for name, _ in model.named_parameters():
         params = quantize_weights(state_dict[name].numpy())
         all_weights[name] = params
 
+    # Writing to JSON file
     with open(weight_path, "w") as f:
             json.dump(all_weights, f, indent=4)
 
-    return state_dict
 def main(model_path, weight_path):
     export_weights(model_path=model_path, weight_path=weight_path)
 
