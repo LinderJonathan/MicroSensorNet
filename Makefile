@@ -2,7 +2,9 @@ CXX = g++
 
 # -Iinclude if needed
 
-CXXFLAGS = -Wall -Wextra -std=c++17
+CPPFLAGS += -Isrc -I$(CURDIR)/vcpkg_installed/x64-windows/include/
+
+CXXFLAGS = -Wall -Wextra -std=c++17 $(CPPFLAGS)
 
 TARGET = main
 
