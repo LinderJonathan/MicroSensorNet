@@ -8,7 +8,8 @@ CXXFLAGS = -Wall -Wextra -std=c++17 $(CPPFLAGS)
 
 TARGET = main
 
-SRCS = src/main.cpp
+SRCS = $(wildcard src/*.cpp)
+
 
 OBJS = $(SRCS:.cpp=.o)
 
