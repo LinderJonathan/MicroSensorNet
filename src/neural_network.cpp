@@ -11,8 +11,6 @@ NeuralNetwork::NeuralNetwork(){
     layers.resize(3);
 }
 
-
-
 std::vector<fixed_point_t> NeuralNetwork::forward(const std::vector<fixed_point_t>& input){
 
     std::vector<fixed_point_t> x = layers[0].layer_forward(input);

@@ -4,21 +4,21 @@
 #include <fstream>
 
 #define WEIGHT_PATH "weights/weights.json"
+#define INFERENCE_DATA_PATH "data/data_human_filtered/inference.csv"
 
 NeuralNetwork NN;
 using json = nlohmann::json;
+
 int main() {
-    
+
+    // Load weights into neural network
     std::ifstream f(WEIGHT_PATH);
     json data = json::parse(f);
     NN.load_weights(data);
-    //std::cout << data.dump() << std::endl;
-    for (size_t i = 0; i < NN.layers[0].weights.size(); i++) {
-        const auto& row = NN.layers[0].weights[i];
-        for (size_t j = 0; j < row.size(); j++) {
-            std::cout << row[j] << ' ';
-        }
-        std::cout << std::endl;
-    }
+
+    // Load test data and perform inference
+    
+
+    // TODO: log neural network performance (MCU constraints, inference time, RAM usage, latency)
     return 0;
 }
