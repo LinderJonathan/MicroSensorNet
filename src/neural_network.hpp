@@ -27,7 +27,7 @@ struct DenseLayer {
 
 class NeuralNetwork {
     public:
-
+        NeuralNetwork();
         std::vector<DenseLayer> layers;
 
         // Forward expects a vector of (x,y,z) coordinates, and produces 

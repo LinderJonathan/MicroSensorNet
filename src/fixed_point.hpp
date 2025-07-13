@@ -11,10 +11,18 @@ typedef int16_t fixed_point_t;
 /// CONVERSIONS ///
 ///////////////////
 
-inline fixed_point_t to_fixed(float val) {
+inline fixed_point_t to_fixed(float value) {
 
-    return fixed_point_t(val * (1 << FRAC_BITS));
+    return fixed_point_t(value * (1 << FRAC_BITS));
 
+}
+
+inline std::vector<fixed_point_t> to_fixed_vect(std::vector<float> values) {
+    std::vector<fixed_point_t> values_fixed;
+    for (auto& value : values) {
+        values_fixed.push_back(to_fixed(value));
+    }
+    return values_fixed;
 }
 
 inline float to_float(fixed_point_t val){
@@ -36,7 +44,7 @@ inline fixed_point_t fixed_sub (fixed_point_t a, fixed_point_t b){
 }
 
 inline fixed_point_t fixed_mul (fixed_point_t a, fixed_point_t b){
-    return static_cast<fixed_point_t>(static_cast<uint32_t>(a * b) >> FRAC_BITS);
+    return static_cast<fixed_point_t>((int32_t(a) * int32_t(b)) >> FRAC_BITS);
 }
 
 inline fixed_point_t fixed_inner_product (std::vector<fixed_point_t> a, std::vector<fixed_point_t> b) {
