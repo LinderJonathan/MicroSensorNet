@@ -52,7 +52,19 @@ class Learning():
         return (x_train_tensor, y_train_tensor, x_test_tensor, y_test_tensor)
     
     def train(self, x_train_tensor, y_train_tensor):
-        
+        """
+        Trains a model to classify human activity based on (x,y,z) accelerometer input.
+        Uses cross entropy loss to minimize incorrectly predicted labels. ADAM is used for parameter update
+        Model is trained and saved to file as a state dictionary.
+
+        Args:
+            x_train_tensor (tensor): Tensor of shape (batch_size, class_size) holding (x,y,z) accelerometer data
+            y_train_tensor (tensor): tensor of shape (batch_size, ) holding activity labels for corresponding (x,y,z) data
+
+        Returns:
+            void
+
+        """
         training_set = TensorDataset(x_train_tensor, y_train_tensor)
         loader = DataLoader(training_set, batch_size=self.batch_size)
 
@@ -76,12 +88,23 @@ class Learning():
             print(f"Accruacy: {correct_predicted/len(y_train_tensor)}")
             print(f"Loss: {total_loss} \n")
         
-        # save model to file
         if self.model_path is not None:
             torch.save(self.model.state_dict(), self.model_path)
         return 0
 
+
     def predicted(self, logits, y_test_tensor): # model_path
+        """
+        Gets the number of correctly predicted activites.
+
+        Args:
+            logits (tensor): tensor of shape (batch_size, class_size) of raw logits
+            y_test_tensor (tensor) : tensor of shape (batch_size, ) of  true labels for each input 
+
+        Returns:
+            amount of correctly predicted activites
+
+        """
         predictions = torch.argmax(logits, dim=1)
         
         predicted_correct = (predictions == y_test_tensor).sum().item()

@@ -52,7 +52,7 @@ inline fixed_point_t fixed_inner_product (std::vector<fixed_point_t> a, std::vec
     if (a.size() != b.size()) {
         throw std::invalid_argument("Vectors must be of equal size, but are of size" + std::to_string(a.size()) + " and " + std::to_string(b.size()));
     }
-    for (int i = 0; i < a.size(); i++) {
+    for (std::size_t i = 0; i < a.size(); i++) {
         inner_product += fixed_mul(a[i], b[i]);
     }
     return inner_product;
