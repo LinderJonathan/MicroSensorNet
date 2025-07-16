@@ -1,6 +1,7 @@
 {
-    "name": "microsensornet",
-    "dependencies": [
-        "nlohmann-json"
-    ]
+  "name": "microsensornet",
+  "dependencies": [
+    "nlohmann-json"
+  ],
+  "builtin-baseline": "031ad89ce6c575df35a8e58707ad2c898446c63e"
 }
